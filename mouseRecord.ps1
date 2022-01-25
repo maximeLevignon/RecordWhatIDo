@@ -9,6 +9,7 @@ $mouseRecordFrequency = $args[0]
 
 $recording = $true
 while($recording){
-    Start-Sleep -Milliseconds $mouseRecordFrequency
     ((Get-Date -Format FileDateTime) + '-' + ([System.Windows.Forms.Cursor]::Position) + '-' + [System.Windows.Forms.UserControl]::MouseButtons)
+    
+    Start-Sleep -Milliseconds $mouseRecordFrequency
 }
