@@ -5,9 +5,6 @@ Add-Type -AssemblyName PresentationFramework
 ## for screen detection
 Add-Type -AssemblyName System.Windows.Forms
 
-## get screen resolution
-[System.Windows.Forms.Screen]::AllScreens
-
 
 $focusedAppTrackFrequency = 1000 #in ms
 $mouseTrackFrequency = 10 #in ms
@@ -18,6 +15,7 @@ $mouseTrackFrequency = 10 #in ms
 $mouseTrack = @()
 $focusedAppTrack = @()
 $keyboardTrack = @()
+
 
 $keyboardTracking = $true
 
@@ -37,10 +35,7 @@ switch  ($promptRecordingBox) {
 
     if ($keyboardTracking) {
       ## KEYBOARD LETTER TRACKING
-      $keyboardLetterRecordJob = Start-Job -filePath .\keyboardLetterRecord.ps1
-
-      ## KEYBOARD SPECIAL TRACKING
-      $keyboardSpecialRecordJob = Start-Job -filePath .\keyboardSpecialRecord.ps1
+      $keyboardRecordJob = Start-Job -filePath .\keyboardRecord.ps1
     }
 
     ## RECORDING BOX
@@ -73,18 +68,11 @@ switch  ($promptRecordingBox) {
 
               if ($keyboardTracking) {
                 ## RECEIVE KEYBOARD LETTER TRACKING INFO
-                $keyboardLetterTrack += Receive-Job $keyboardLetterRecordJob
-                Stop-Job $keyboardLetterRecordJob
-                Remove-Job $keyboardLetterRecordJob
-                $keyboardLetterTrackFile = New-Item -Path "./$dirName" -Name "keyboardLetterTrack.txt" -Force # -Force for overwrite file
-                $keyboardLetterTrack | Out-File $keyboardLetterTrackFile
-
-                ## RECEIVE KEYBOARD SPECIAL TRACKING INFO
-                $keyboardSpecialTrack += Receive-Job $keyboardSpecialRecordJob
-                Stop-Job $keyboardSpecialRecordJob
-                Remove-Job $keyboardSpecialRecordJob
-                $keyboardSpecialTrackFile = New-Item -Path "./$dirName" -Name "keyboardSpecialTrack.txt" -Force # -Force for overwrite file
-                $keyboardSpecialTrack | Out-File $keyboardSpecialTrackFile
+                $keyboardTrack += Receive-Job $keyboardRecordJob
+                Stop-Job $keyboardRecordJob
+                Remove-Job $keyboardRecordJob
+                $keyboardTrackFile = New-Item -Path "./$dirName" -Name "keyboardTrack.txt" -Force # -Force for overwrite file
+                $keyboardTrack | Out-File $keyboardTrackFile
               }
 
               exit
@@ -92,9 +80,6 @@ switch  ($promptRecordingBox) {
           }
 
       }
-
-
-    
     
   }
 

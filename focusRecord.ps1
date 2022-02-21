@@ -23,6 +23,8 @@ $focusRecordFrequency = 1000 #in ms
 
 $rectangle = New-Object RECT
 
+'Starting Focused App Recording'
+
 $recording = $true
 while($recording){
   $silent = [UserWindow]::GetWindowRect((Get-Process | Where-Object { $_.mainWindowHandle -eq [UserWindow]::GetForegroundWindow()}).MainWindowHandle,[ref]$rectangle)

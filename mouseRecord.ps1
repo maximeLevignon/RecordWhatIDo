@@ -7,6 +7,8 @@ $mouseRecordFrequency = $args[0]
 
 #Start-Sleep -s 10
 
+'Starting Mouse Recording'
+
 $recording = $true
 while($recording){
     ((Get-Date -Format FileDateTime) + '-' + ([System.Windows.Forms.Cursor]::Position) + '-' + [System.Windows.Forms.UserControl]::MouseButtons + '-M')

