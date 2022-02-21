@@ -17,6 +17,9 @@ $mouseTrackFrequency = 10 #in ms
 
 $mouseTrack = @()
 $focusedAppTrack = @()
+$keyboardTrack = @()
+
+$keyboardTracking = $true
 
 
 
@@ -32,8 +35,13 @@ switch  ($promptRecordingBox) {
     ## MOUSE TRACKING
     $mouseRecordJob = Start-Job -filePath .\mouseRecord.ps1 -ArgumentList $mouseTrackFrequency
 
-    ## KEYBOARD TRACKING
-    $keyboardRecordJob = Start-Job -filePath .\keyboardRecord.ps1 -ArgumentList
+    if ($keyboardTracking) {
+      ## KEYBOARD LETTER TRACKING
+      $keyboardLetterRecordJob = Start-Job -filePath .\keyboardLetterRecord.ps1
+
+      ## KEYBOARD SPECIAL TRACKING
+      $keyboardSpecialRecordJob = Start-Job -filePath .\keyboardSpecialRecord.ps1
+    }
 
     ## RECORDING BOX
       $recordingBox = [System.Windows.MessageBox]::Show('RECORDING - Click "Ok" when you are done recording - Do not enter any sort of credentials during recording','RecordWhatIDo','Ok','Warning')
@@ -62,6 +70,22 @@ switch  ($promptRecordingBox) {
               Remove-Job $mouseRecordJob
               $mouseTrackFile = New-Item -Path "./$dirName" -Name "mouseTrack.txt" -Force # -Force for overwrite file
               $mouseTrack | Out-File $mouseTrackFile
+
+              if ($keyboardTracking) {
+                ## RECEIVE KEYBOARD LETTER TRACKING INFO
+                $keyboardLetterTrack += Receive-Job $keyboardLetterRecordJob
+                Stop-Job $keyboardLetterRecordJob
+                Remove-Job $keyboardLetterRecordJob
+                $keyboardLetterTrackFile = New-Item -Path "./$dirName" -Name "keyboardLetterTrack.txt" -Force # -Force for overwrite file
+                $keyboardLetterTrack | Out-File $keyboardLetterTrackFile
+
+                ## RECEIVE KEYBOARD SPECIAL TRACKING INFO
+                $keyboardSpecialTrack += Receive-Job $keyboardSpecialRecordJob
+                Stop-Job $keyboardSpecialRecordJob
+                Remove-Job $keyboardSpecialRecordJob
+                $keyboardSpecialTrackFile = New-Item -Path "./$dirName" -Name "keyboardSpecialTrack.txt" -Force # -Force for overwrite file
+                $keyboardSpecialTrack | Out-File $keyboardSpecialTrackFile
+              }
 
               exit
 
