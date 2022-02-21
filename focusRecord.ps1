@@ -26,6 +26,6 @@ $rectangle = New-Object RECT
 $recording = $true
 while($recording){
   $silent = [UserWindow]::GetWindowRect((Get-Process | Where-Object { $_.mainWindowHandle -eq [UserWindow]::GetForegroundWindow()}).MainWindowHandle,[ref]$rectangle)
-  ((Get-Date -Format FileDateTime) + '-' + ((Get-Process | Where-Object { $_.mainWindowHandle -eq [UserWindow]::GetForegroundWindow() }).Name) + '-[TopLeft{' + $rectangle.Left + ';' + $rectangle.Top + '}BottomRight{' + $rectangle.Right + ';' + $rectangle.Bottom) + '}]-F'
+  ((Get-Date -Format FileDateTime) + '-' + ((Get-Process | Where-Object { $_.mainWindowHandle -eq [UserWindow]::GetForegroundWindow() }).Name) + '-[TopLeft{' + $rectangle.Left + ';' + $rectangle.Top + '}-BottomRight{' + $rectangle.Right + ';' + $rectangle.Bottom) + '}]-F'
   Start-Sleep -Milliseconds $focusRecordFrequency
 }

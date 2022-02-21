@@ -32,6 +32,9 @@ switch  ($promptRecordingBox) {
     ## MOUSE TRACKING
     $mouseRecordJob = Start-Job -filePath .\mouseRecord.ps1 -ArgumentList $mouseTrackFrequency
 
+    ## KEYBOARD TRACKING
+    $keyboardRecordJob = Start-Job -filePath .\keyboardRecord.ps1 -ArgumentList
+
     ## RECORDING BOX
       $recordingBox = [System.Windows.MessageBox]::Show('RECORDING - Click "Ok" when you are done recording - Do not enter any sort of credentials during recording','RecordWhatIDo','Ok','Warning')
       switch ($recordingBox) {

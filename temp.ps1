@@ -1,68 +1,23 @@
-Add-Type @"
-    using System;
-    using System.Runtime.InteropServices;
-    public class WinAp {
-      [DllImport("user32.dll")]
-      [return: MarshalAs(UnmanagedType.Bool)]
-      public static extern bool SetForegroundWindow(IntPtr hWnd);
-
-      [DllImport("user32.dll")]
-      [return: MarshalAs(UnmanagedType.Bool)]
-      public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+do
+{
+    # wait for a key to be available:
+    if ([Console]::KeyAvailable)
+    {
+        # read the key, and consume it so it won't
+        # be echoed to the console:
+        $keyInfo = [Console]::ReadKey($true)
+        # exit loop
+        break
     }
-"@
 
-Add-Type @"
-  using System;
-  using System.Runtime.InteropServices;
-  public class Tricks {
-    [DllImport("user32.dll")]
-    public static extern IntPtr GetForegroundWindow();
-}
-"@
+    # write a dot and wait a second
+    Write-Host '.' -NoNewline
+    Start-Sleep -Seconds 1
 
-$a = [tricks]::GetForegroundWindow()
+} while ($true)
 
-$WH = get-process | Where-Object { $_.mainwindowhandle -eq $a }
+# emit a new line
+Write-Host
 
-$processName = "mintty"
-$process = Get-Process | Where-Object { $_.MainWindowTitle } | Where-Object {$_.Name -like "$processName"}
-
-$processWindow = $process.MainWindowHandle
-
-[void] [WinAp]::SetForegroundWindow($processWindow)
-[void] [WinAp]::ShowWindow($processWindow, 4)
-
-
-Get-Process | Where-Object {$_.MainWindowTitle} | Where-Object {$_.Name -like "Discord"} | Set-Window
-
-$Host.UI.RawUI.WindowSize.Width
-
-$Host.UI.RawUI.WindowSize.Height
-
-
-Add-Type @"
-              using System;
-              using System.Runtime.InteropServices;
-              public class Window {
-                [DllImport("user32.dll")]
-                [return: MarshalAs(UnmanagedType.Bool)]
-                public static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
-
-                [DllImport("User32.dll")]
-                public extern static bool MoveWindow(IntPtr handle, int x, int y, int width, int height, bool redraw);
-              }
-              public struct RECT
-              {
-                public int Left;        // x position of upper-left corner
-                public int Top;         // y position of upper-left corner
-                public int Right;       // x position of lower-right corner
-                public int Bottom;      // y position of lower-right corner
-              }
-"@
-
-$process = Get-Process | Where-Object {$_.MainWindowTitle} | Where-Object {$_.Name -like "Discord"}
-$processHandle = $process.MainWindowHandle
-$rectangle = New-Object RECT
-[Window]::GetWindowRect($processHandle,[ref]$rectangle)
-$rectangle
+# show the received key info object:
+$keyInfo
