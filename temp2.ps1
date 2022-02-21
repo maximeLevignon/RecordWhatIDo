@@ -1,5 +1,7 @@
 while($true){
 
-    [Console]::ReadKey($true).KeyChar
-    [Console]::ReadKey($true).Modifiers
+    $key = [Console]::ReadKey($true)
+    $key.Key
+    $key.KeyChar
+    $key.Modifiers
 }
