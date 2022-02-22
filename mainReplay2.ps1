@@ -106,10 +106,48 @@ foreach($item in $allEventsSorted){
         'KL' {  
             Write-Host 'Replaying an keyboard letter key event' 
             $key = $item[1]
-            [System.Windows.Forms.SendKeys]::SendWait("$key")
+            [System.Windows.Forms.SendKeys]::SendKeys("$key")
         }
         'KS' {  
-            Write-Host 'Replaying an keyboard special key event' 
+            Write-Host 'Replaying an keyboard special key event'
+            switch($key){
+                'Backspace' {
+                    [System.Windows.Forms.SendKeys]::SendKeys({BACKSPACE})
+                }
+                'Enter' {
+                    [System.Windows.Forms.SendKeys]::SendKeys({~})
+                }
+                'LeftControl' {
+                    [System.Windows.Forms.SendKeys]::SendKeys({^})
+                }
+                'RightControl' {
+                    [System.Windows.Forms.SendKeys]::SendKeys({BACKSPACE})
+                }
+                'LeftShift' {
+                    [System.Windows.Forms.SendKeys]::SendKeys("+")
+                }
+                'RightShift' {
+                    [System.Windows.Forms.SendKeys]::SendKeys({BACKSPACE})
+                }
+                'Escape' {
+                    [System.Windows.Forms.SendKeys]::SendKeys({ESCAPE})
+                }
+                'Delete' {
+                    [System.Windows.Forms.SendKeys]::SendKeys({DELETE})
+                }
+                'Tab' {
+                    [System.Windows.Forms.SendKeys]::SendKeys({TAB})
+                }
+                'CapitalLock' {
+                    [System.Windows.Forms.SendKeys]::SendKeys({CAPSLOCK})
+                }
+                'LeftWindows' {
+                    [System.Windows.Forms.SendKeys]::SendKeys({BACKSPACE})
+                }
+                'LeftMenu' {
+                    [System.Windows.Forms.SendKeys]::SendKeys({BACKSPACE})
+                }
+            }
         }
         Default {
             Write-Host 'Error replaying an : event - not recognize' 
