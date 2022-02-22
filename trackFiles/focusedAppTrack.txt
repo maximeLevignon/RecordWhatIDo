@@ -1,0 +1,11 @@
+Starting Focused App Recording
+20220222T1024144171-pwsh-[TopLeft{761;471}-BottomRight{1176;630}]-F
+20220222T1024159898--[TopLeft{761;471}-BottomRight{1176;630}]-F
+20220222T1024176154-notepad-[TopLeft{681;214}-BottomRight{1593;989}]-F
+20220222T1024189234-notepad-[TopLeft{681;214}-BottomRight{1593;989}]-F
+20220222T1024201948-notepad-[TopLeft{681;214}-BottomRight{1593;989}]-F
+20220222T1024214564-notepad-[TopLeft{681;214}-BottomRight{1593;989}]-F
+20220222T1024226957-notepad-[TopLeft{681;214}-BottomRight{1593;989}]-F
+20220222T1024239249-notepad-[TopLeft{681;214}-BottomRight{1593;989}]-F
+20220222T1024251540-notepad-[TopLeft{681;214}-BottomRight{1593;989}]-F
+20220222T1024264469-dllhost dwm fontdrvhost fontdrvhost ibmpmsvc ibtsiva Idle igfxCUIService igfxEM igfxHK LockApp LPlatSvc LPlatSvc lsass Memory Compression Microsoft.Photos MicrosoftEdgeUpdate MoUsoCoreWorker MpCopyAccelerator msedge msedge msedge msedge msedge msedge msedge msedge msedge msedge msedge msedge msedge MsMpEng NVDisplay.Container NVDisplay.Container OfficeClickToRun PowerMgr PresentationFontCache pwsh-[TopLeft{681;214}-BottomRight{1593;989}]-F
