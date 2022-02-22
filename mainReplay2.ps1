@@ -1,16 +1,24 @@
+## ADDING TYPES AND IMPORTS
+Import-Module .\Imported-Functions.ps1
+
+Add-Type @"
+    using System;
+    using System.Runtime.InteropServices;
+    public class WinAp {
+      [DllImport("user32.dll")]
+      [return: MarshalAs(UnmanagedType.Bool)]
+      public static extern bool SetForegroundWindow(IntPtr hWnd);
+
+      [DllImport("user32.dll")]
+      [return: MarshalAs(UnmanagedType.Bool)]
+      public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+    }
+"@
+
 Add-Type -AssemblyName System.Windows.Forms
+Add-Type -MemberDefinition '[DllImport("user32.dll")] public static extern void mouse_event(int flags, int dx, int dy, int cButtons, int info);' -Name U32 -Namespace W;
 
-function Click-MouseButton
-{
-    $signature=@' 
-      [DllImport("user32.dll",CharSet=CharSet.Auto, CallingConvention=CallingConvention.StdCall)]
-      public static extern void mouse_event(long dwFlags, long dx, long dy, long cButtons, long dwExtraInfo);
-'@ 
 
-    $SendMouseClick = Add-Type -memberDefinition $signature -name "Win32MouseEventNew" -namespace Win32Functions -passThru 
-
-        $SendMouseClick::mouse_event(0x00000004, 0, 0, 0, 0);
-}
 ## GET ALL DATA
 
 $mouseEvents = Get-Content .\trackFiles\mouseTrack.txt
@@ -23,28 +31,34 @@ $keyboardEvents = Get-Content .\trackFiles\keyboardTrack.txt
 $allEvents = @()
 
 $first, $rest = $mouseEvents
-$allEvents += $rest
+$mouseEvents = $rest
+$allEvents += $mouseEvents
 $first, $rest = $focusEvents
-$allEvents += $rest
+$focusEvents = $rest
+$allEvents += $focusEvents
 $first, $rest = $keyboardEvents
-$allEvents += $rest
+$keyboardEvents = $rest
+$allEvents += $keyboardEvents
 
 
 ## SORT ALL DATA
 
-$allEventsSorted = $allEvents | sort
+$allEventsSorted = $allEvents | Sort-Object
 #$allEventsSorted
 
 
-## LAUNCH ALL APPS IF NOT ALREADY OPENED
+## LAUNCH ALL APPS IF NOT ALREADY OPENED, AND BRING FIRST APP IN FOCUS
 
 $allApps = @()
 foreach ($item in $focusEvents) {
-    $split = $item.Split('-')
-    $allApps += $split[1]
+    $split = $item.Split('--')
+    if($split[1].length -lt 50 -AND ($split[1]) -ne 'powershell') {
+        $allApps += ($split[1] + '--' + $split[2] + '--' + $split[3])
+    }
 }
-$allApps = $allApps | select -Unique
+$allApps = $allApps | Select-Object -Unique
 foreach ($item in $allApps) {
+    $item = ($item.Split('--'))[0]
     try {
         if (!(Get-Process $item)) {
             Start-Process $item
@@ -54,11 +68,34 @@ foreach ($item in $allApps) {
     }
 }
 
+# bringing first application in focus
+if($allApps.length -gt 1){
+    $firstApp = $allApps[0].Split('--')
+} else {
+    $firstApp = $allApps.Split('--')
+}
+$process = Get-Process $firstApp[0]
+$shell = New-Object -ComObject "Shell.Application"
+$shell.minimizeall()
+Start-Sleep -Milliseconds 1
+Show-Process -Process $process
+$topLeftX = ($firstApp[1].Split(';'))[0].Replace('TopLeft{','')
+$topLeftY = ($firstApp[1].Split(';'))[1].Replace('}','')
+$bottomRightX = ($firstApp[2].Split(';'))[0].Replace('BottomRight{','')
+$bottomRightY = ($firstApp[2].Split(';'))[1].Replace('}','')
+Set-Window -ProcessName $process.Id -X $topLeftX -Y $topLeftY -Width ($bottomRightX - $topLeftX) -Height ($bottomRightY - $topLeftY)
 
-## GET TIME = 0
+
+
+## GET TIME = 0 AND INITIALISING VARIABLES
 
 $first, $rest = $allEventsSorted
-$timeOld = $first.Split("-")[0]
+$timeOld = $first.Split("--")[0]
+
+$oldMouseX = $null
+$oldMouseY = $null
+$mouseLeftPressed = $false
+$mouseRightPressed = $false
 
 
 ## REPLAYING EVENTS
@@ -66,7 +103,7 @@ $timeOld = $first.Split("-")[0]
 foreach($item in $allEventsSorted){
 
     $item
-    $item = $item.Split('-')
+    $item = $item.Split('--')
 
 
     ## APPLYING DELAY BETWEEN EVENTS
@@ -88,27 +125,55 @@ foreach($item in $allEventsSorted){
             Write-Host 'Replaying a mouse event'
             $mouseX = ($item[1].Split(','))[0].Replace('{X=','')
             $mouseY = ($item[1].Split(','))[1].Replace('Y=','').Replace('}','')
-            $button = $item[2]
-            if($button -eq "None"){
+            $mouseButton = $item[2]
+
+            if(($mouseX -ne $oldMouseX) -OR ($mouseY -ne $oldMouseY)) {
                 Write-Host "Placing cursor at [ $mouseX ; $mouseY ]"
                 [System.Windows.Forms.Cursor]::Position = New-Object System.Drawing.Point($mouseX, $mouseY)
+                $oldMouseX = $mouseX
+                $oldMouseY = $mouseY
             }
-            if($button -eq "Left"){
-                Write-Host "Clicking left at  [ $mouseX ; $mouseY ] "
-                Click-MouseButton
+            
+            # https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-mouse_event?redirectedfrom=MSDN
+            if(($mouseButton -eq "Left") -AND (!$mouseLeftPressed)){
+                Write-Host "Pressing left at  [ $mouseX ; $mouseY ]"
+                #left mouse press
+                [W.U32]::mouse_event(0x0002,0,0,0,0);
+                $mouseLeftPressed = $true
             }
+            if(($mouseButton -eq "None") -AND ($mouseLeftPressed)){
+                Write-Host "Releasing left at  [ $mouseX ; $mouseY ]"
+                #left mouse release
+                [W.U32]::mouse_event(0x0004,0,0,0,0);
+                $mouseLeftPressed = $false
+            }
+
+            if(($mouseButton -eq "Right") -AND (!$mouseRightPressed)){
+                Write-Host "Pressing right at  [ $mouseX ; $mouseY ]"
+                #right mouse press
+                [W.U32]::mouse_event(0x0008,0,0,0,0);
+                $mouseRightPressed = $true
+            }
+            if(($mouseButton -eq "None") -AND ($mouseRightPressed)){
+                Write-Host "Releasing right at  [ $mouseX ; $mouseY ]"
+                #right mouse release
+                [W.U32]::mouse_event(0x0010,0,0,0,0);
+                $mouseRightPressed = $false
+            }
+
+            
             
             
         }
-        'F' {  
+        'tF' {  
             Write-Host 'Replaying an application in focus event' 
         }
-        'KL' {  
+        'tKL' {  
             Write-Host 'Replaying an keyboard letter key event' 
             $key = $item[1]
             [System.Windows.Forms.SendKeys]::SendKeys("$key")
         }
-        'KS' {  
+        'tKS' {  
             Write-Host 'Replaying an keyboard special key event'
             switch($key){
                 'Backspace' {
