@@ -1,6 +1,16 @@
 Add-Type -AssemblyName System.Windows.Forms
 
+function Click-MouseButton
+{
+    $signature=@' 
+      [DllImport("user32.dll",CharSet=CharSet.Auto, CallingConvention=CallingConvention.StdCall)]
+      public static extern void mouse_event(long dwFlags, long dx, long dy, long cButtons, long dwExtraInfo);
+'@ 
 
+    $SendMouseClick = Add-Type -memberDefinition $signature -name "Win32MouseEventNew" -namespace Win32Functions -passThru 
+
+        $SendMouseClick::mouse_event(0x00000004, 0, 0, 0, 0);
+}
 ## GET ALL DATA
 
 $mouseEvents = Get-Content .\trackFiles\mouseTrack.txt
@@ -79,8 +89,15 @@ foreach($item in $allEventsSorted){
             $mouseX = ($item[1].Split(','))[0].Replace('{X=','')
             $mouseY = ($item[1].Split(','))[1].Replace('Y=','').Replace('}','')
             $button = $item[2]
-            Write-Host "Placing cursor at [ $mouseX ; $mouseY ]"
-            [System.Windows.Forms.Cursor]::Position = New-Object System.Drawing.Point($mouseX, $mouseY)
+            if($button -eq "None"){
+                Write-Host "Placing cursor at [ $mouseX ; $mouseY ]"
+                [System.Windows.Forms.Cursor]::Position = New-Object System.Drawing.Point($mouseX, $mouseY)
+            }
+            if($button -eq "Left"){
+                Write-Host "Clicking left at  [ $mouseX ; $mouseY ] "
+                Click-MouseButton
+            }
+            
             
         }
         'F' {  
@@ -88,6 +105,8 @@ foreach($item in $allEventsSorted){
         }
         'KL' {  
             Write-Host 'Replaying an keyboard letter key event' 
+            $key = $item[1]
+            [System.Windows.Forms.SendKeys]::SendWait("$key")
         }
         'KS' {  
             Write-Host 'Replaying an keyboard special key event' 

@@ -1,6 +1,5 @@
-
-  # Signatures for API Calls
-  $signatures = @'
+# Signatures for API Calls
+$signatures = @'
 [DllImport("user32.dll", CharSet=CharSet.Auto, ExactSpelling=true)] 
 public static extern short GetAsyncKeyState(int virtualKeyCode); 
 [DllImport("user32.dll", CharSet=CharSet.Auto)]
