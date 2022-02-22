@@ -1,3 +1,6 @@
+Add-Type -AssemblyName System.Windows.Forms
+
+
 ## GET ALL DATA
 
 $mouseEvents = Get-Content .\trackFiles\mouseTrack.txt
@@ -69,6 +72,30 @@ foreach($item in $allEventsSorted){
 
     ## SWITCH CASING DEPENDING ON EVENT TYPE
 
+    switch ($item[$item.length - 1]) {
+        ## REPLAYING MOUSE EVENTS
+        'M' { 
+            Write-Host 'Replaying a mouse event'
+            $mouseX = ($item[1].Split(','))[0].Replace('{X=','')
+            $mouseY = ($item[1].Split(','))[1].Replace('Y=','').Replace('}','')
+            $button = $item[2]
+            Write-Host "Placing cursor at [ $mouseX ; $mouseY ]"
+            [System.Windows.Forms.Cursor]::Position = New-Object System.Drawing.Point($mouseX, $mouseY)
+            
+        }
+        'F' {  
+            Write-Host 'Replaying an application in focus event' 
+        }
+        'KL' {  
+            Write-Host 'Replaying an keyboard letter key event' 
+        }
+        'KS' {  
+            Write-Host 'Replaying an keyboard special key event' 
+        }
+        Default {
+            Write-Host 'Error replaying an : event - not recognize' 
+        }
+    }
 
 }
 
