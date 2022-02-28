@@ -1,18 +1,5 @@
 Starting Focused App Recording
-20220228T1052141188--pwsh--TopLeft{761;471}--BottomRight{1176;630}--F
-20220228T1052153927--notepad--TopLeft{1027;296}--BottomRight{1692;712}--F
-20220228T1052166473--notepad--TopLeft{1027;296}--BottomRight{1692;712}--F
-20220228T1052178977--notepad--TopLeft{1027;296}--BottomRight{1692;712}--F
-20220228T1052191600----TopLeft{1027;296}--BottomRight{1692;712}--F
-20220228T1052204219----TopLeft{1027;296}--BottomRight{1692;712}--F
-20220228T1052216699----TopLeft{1027;296}--BottomRight{1692;712}--F
-20220228T1052229204----TopLeft{1027;296}--BottomRight{1692;712}--F
-20220228T1052241752--ApplicationFrameHost--TopLeft{1055;114}--BottomRight{1616;801}--F
-20220228T1052254486--ApplicationFrameHost--TopLeft{1055;114}--BottomRight{1616;801}--F
-20220228T1052267398--ApplicationFrameHost--TopLeft{364;177}--BottomRight{925;864}--F
-20220228T1052279971--ApplicationFrameHost--TopLeft{364;177}--BottomRight{925;864}--F
-20220228T1052292565--notepad--TopLeft{1027;296}--BottomRight{1692;712}--F
-20220228T1052305082--notepad--TopLeft{1027;296}--BottomRight{1692;712}--F
-20220228T1052317639--notepad--TopLeft{1027;296}--BottomRight{1692;712}--F
-20220228T1052330194--ApplicationFrameHost--TopLeft{364;177}--BottomRight{925;864}--F
-20220228T1052342878--pwsh--TopLeft{761;471}--BottomRight{1176;630}--F
+20220228T1148255628--pwsh--TopLeft{761;471}--BottomRight{1176;630}--F
+20220228T1148268332--notepad--TopLeft{1201;218}--BottomRight{1866;634}--F
+20220228T1148280829--notepad--TopLeft{1201;218}--BottomRight{1866;634}--F
+20220228T1148293371--notepad--TopLeft{1201;218}--BottomRight{1866;634}--F

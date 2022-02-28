@@ -48,7 +48,7 @@ $allEventsSorted = $allEvents | Sort-Object
 
 
 ## LAUNCH ALL APPS IF NOT ALREADY OPENED, AND BRING FIRST APP IN FOCUS
-
+<#
 $allApps = @()
 foreach ($item in $focusEvents) {
     $split = $item.Split('--')
@@ -67,9 +67,7 @@ foreach ($item in $allApps) {
         Write-Host "ERROR : could not launch $item"
     }
 }
-
 # bringing first application in focus
-
 if($allApps.length -gt 1){
     $firstApp = $allApps[0].Split('--')
 } elseif($allApps.length -gt 0) {
@@ -91,7 +89,7 @@ try{
 } catch {
     "Error : no app to launch"
 }
-
+#>
 
 ## GET TIME = 0 AND INITIALISING VARIABLES
 
@@ -175,22 +173,22 @@ foreach($item in $allEventsSorted){
         }
         'F' {  
             Write-Host 'Replaying an application in focus event'
-            try {
-                $process = Get-Process $item[1]
-                if($process.ProcessName -ne $oldProcess.ProcessName) {
-                    $shell = New-Object -ComObject "Shell.Application"
-                    $shell.minimizeall()
-                    Start-Sleep -Milliseconds 1
-                    Show-Process -Process $process
-                    $topLeftX = ($item[2].Split(';'))[0].Replace('TopLeft{','')
-                    $topLeftY = ($item[2].Split(';'))[1].Replace('}','')
-                    $bottomRightX = ($item[3].Split(';'))[0].Replace('BottomRight{','')
-                    $bottomRightY = ($item[3].Split(';'))[1].Replace('}','')
-                    Set-Window -ProcessName $process.Id -X $topLeftX -Y $topLeftY -Width ($bottomRightX - $topLeftX) -Height ($bottomRightY - $topLeftY)
-                    $oldProcess = $process
-                }
-            } catch {
-                "Error displaying app"
+            if (!(Get-Process $item[1]) -AND ($item[1] -ne 'powershell')) {
+                Start-Process $item[1]
+                Start-Sleep -Milliseconds 1
+            }
+            $process = Get-Process $item[1]
+            if($process.ProcessName -ne $oldProcess.ProcessName) {
+                $shell = New-Object -ComObject "Shell.Application"
+                $shell.minimizeall()
+                Start-Sleep -Milliseconds 1
+                Show-Process -Process $process
+                $topLeftX = ($item[2].Split(';'))[0].Replace('TopLeft{','')
+                $topLeftY = ($item[2].Split(';'))[1].Replace('}','')
+                $bottomRightX = ($item[3].Split(';'))[0].Replace('BottomRight{','')
+                $bottomRightY = ($item[3].Split(';'))[1].Replace('}','')
+                Set-Window -ProcessName $process.Id -X $topLeftX -Y $topLeftY -Width ($bottomRightX - $topLeftX) -Height ($bottomRightY - $topLeftY)
+                $oldProcess = $process
             }
         }
         'KL' {  
