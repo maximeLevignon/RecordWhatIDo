@@ -221,16 +221,16 @@ foreach($item in $allEventsSorted){
                     [System.Windows.Forms.SendKeys]::SendWait("+")
                 }
                 'Escape' {
-                    [System.Windows.Forms.SendKeys]::SendWait({ESC})
+                    [System.Windows.Forms.SendKeys]::SendWait("{ESC}")
                 }
                 'Delete' {
-                    [System.Windows.Forms.SendKeys]::SendWait({DELETE})
+                    [System.Windows.Forms.SendKeys]::SendWait("{DELETE}")
                 }
                 'Tab' {
-                    [System.Windows.Forms.SendKeys]::SendWait({TAB})
+                    [System.Windows.Forms.SendKeys]::SendWait("{TAB}")
                 }
                 'CapitalLock' {
-                    [System.Windows.Forms.SendKeys]::SendWait({CAPSLOCK})
+                    [System.Windows.Forms.SendKeys]::SendWait("{CAPSLOCK}")
                 }
                 'LeftWindows' {
                     [System.Windows.Forms.SendKeys]::SendWait("^{ESC}")
