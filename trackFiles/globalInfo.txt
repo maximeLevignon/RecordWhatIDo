@@ -1,8 +1,0 @@
-
-[32;1mBitsPerPixel : [0m32
-[32;1mBounds       : [0m{X=0,Y=0,Width=1920,Height=1080}
-[32;1mDeviceName   : [0m\\.\DISPLAY1
-[32;1mPrimary      : [0mTrue
-[32;1mWorkingArea  : [0m{X=0,Y=0,Width=1920,Height=1040}
-
-
