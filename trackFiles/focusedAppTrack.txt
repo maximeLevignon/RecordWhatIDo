@@ -1,5 +1,5 @@
 Starting Focused App Recording
-20220228T1148255628--pwsh--TopLeft{761;471}--BottomRight{1176;630}--F
-20220228T1148268332--notepad--TopLeft{1201;218}--BottomRight{1866;634}--F
-20220228T1148280829--notepad--TopLeft{1201;218}--BottomRight{1866;634}--F
-20220228T1148293371--notepad--TopLeft{1201;218}--BottomRight{1866;634}--F
+20220301T0931345265----TopLeft{0;0}--BottomRight{0;0}--F
+20220301T0931358744----TopLeft{0;0}--BottomRight{0;0}--F
+20220301T0931370908----TopLeft{0;0}--BottomRight{0;0}--F
+20220301T0931383253----TopLeft{0;0}--BottomRight{0;0}--F

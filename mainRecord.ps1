@@ -75,7 +75,7 @@ switch  ($promptRecordingBox) {
                 $keyboardTrack | Out-File $keyboardTrackFile
               }
 
-              exit
+              exit 
 
           }
 
